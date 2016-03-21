@@ -109,8 +109,8 @@ ch2_prediction_score <- predict_run(best_model, t_xval_ch1_ch2_feature_set[4])
 # FORMAT
 # ========================================
 
-ch1_formatted_prediction_score <- format_run(ch1_prediction_score)
-ch2_formatted_prediction_score <- format_run(ch2_prediction_score)
+ch1_formatted_prediction_score <- format_ch1(ch1_prediction_score)
+ch2_formatted_prediction_score <- format_ch2(ch2_prediction_score)
 
 
 # ========================================
