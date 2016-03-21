@@ -57,13 +57,6 @@ if (! require(h2o, quietly=TRUE)) {
                    repos="http://cran.us.r-project.org")
   library(h2o)
 }
-# if you get a RCurl missing dependency problem, install it:
-# sudo apt-get install libcurl4-openssl-dev
-if (! require(ggplot2, quietly=TRUE)) {
-  install.packages("ggplot2",
-                   repos="http://cran.us.r-project.org")
-  library(ggplot2)
-}
 
 library(stringr)
 
