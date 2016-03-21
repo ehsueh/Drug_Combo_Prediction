@@ -27,11 +27,17 @@ NON_PCA_FEATURE_NAMES <- c()
 # vector of features used to train model and predict result which does not require PCA
 # range: 
 
-MODEL_PARAM <- list()
+MODEL_PARAM_START <- list()
 # list of model parameters that map to their corresponding value or range
 # the pipeline will find the optimal value for all parameter to train the model
 # range: 
-# Example: list(h:c(300,300,300), e:1000)
+# Example: list(h=c(300,300,300), e=1000)
+
+MODEL_PARAM_END <- list()
+# list of model parameters that map to their corresponding value or range
+# the pipeline will find the optimal value for all parameter to train the model
+# range: 
+# Example: list(h=c(300,300,300), e=1000)
 
 COMPLETION_STAGE <- "S"
 # desired terminating process in the pipeline
@@ -74,6 +80,15 @@ source("/archive/zipper.R")
 
 
 # ========================================
+# INITIALIZE LOG
+# ========================================
+# require to have master_log.csv and logs/ in Drug_Combo_Prediction/log/ before running this section
+
+# master_log_header <- paste("log id", "xval r2", "date", "log file path", "training time")
+######### Assume this file with header already exist!!!!!!!!!!#########################
+
+
+# ========================================
 # FEATURE PREPARATION
 # ========================================
 
@@ -94,6 +109,7 @@ t_xval_ch1_ch2_feature_set <- prep_run(PCA_FEATURE_NAMES, NON_PCA_FEATURE_NAMES)
 # ========================================
 
 best_model <- train_run(t_xval_ch1_ch2_feature_set[1], t_xval_ch1_ch2_feature_set[2], MODEL_PARAM)
+# train_run takes 3 parameters: paths to the training and xval set and the model parameter list
 # train_run returns the dnn model that gives the best xval score
 
 
@@ -111,8 +127,13 @@ ch2_prediction_score <- predict_run(best_model, t_xval_ch1_ch2_feature_set[4])
 
 ch1_formatted_prediction_score <- format_ch1(ch1_prediction_score)
 ch2_formatted_prediction_score <- format_ch2(ch2_prediction_score)
-
+# format_run convert the data into proper format and store it in .csv file
+# format_run return the path to the csv file
 
 # ========================================
 # ARCHIVE
 # ========================================
+
+archive_run(ch1_confidence_path, ch1_formatted_prediction_path, 1)
+archive_run(ch2_confidence_path, ch2_formatted_prediction_path, 2)
+# input: confidence path, prediction path, challenge index (1 is 1a and 2 is 2)
