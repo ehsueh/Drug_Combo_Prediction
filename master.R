@@ -19,16 +19,19 @@ XVAL2TRAIN_RATIO <- 0.3
 # proportion of the training set used for cross validation
 # range: 0 to 1
 
-FEATURE_NAMES <- c()
-# vector of features used to train model and predict result
+PCA_FEATURE_NAMES <- c()
+# vector of features used to train model and predict result which require PCA
 # range: 
 
-PCA_
+NON_PCA_FEATURE_NAMES <- c()
+# vector of features used to train model and predict result which does not require PCA
+# range: 
 
 MODEL_PARAM <- list()
 # list of model parameters that map to their corresponding value or range
 # the pipeline will find the optimal value for all parameter to train the model
 # range: 
+# Example: list(h:c(300,300,300), e:1000)
 
 COMPLETION_STAGE <- "S"
 # desired terminating process in the pipeline
@@ -80,4 +83,36 @@ load("/feature_bank/monotherapy_normalized_avg_imputed.RData")
 #   row - 1794 + 1089 + 31535 (training feature set + ch 1a feature set + ch 2 feature set without duplication)
 #   col - depends like the feature group
 
+t_xval_ch1_ch2_feature_set <- prep_run(PCA_FEATURE_NAMES, NON_PCA_FEATURE_NAMES)
+# prep_run returns a vector of four .csv file paths that store h2o formated matrices for training, xval, ch1 and ch2 feature sets
 
+######## MODIFY SO THAT WE DON'T PREP ALL THE MATRICES CUZ THERE IS THE STAGE CONFIG!!!!!!!
+
+
+# ========================================
+# NEURAL NETWORK TRAINING
+# ========================================
+
+best_model <- train_run(t_xval_ch1_ch2_feature_set[1], t_xval_ch1_ch2_feature_set[2], MODEL_PARAM)
+# train_run returns the dnn model that gives the best xval score
+
+
+# ========================================
+# PREDICTION
+# ========================================
+
+ch1_prediction_score <- predict_run(best_model, t_xval_ch1_ch2_feature_set[3])
+ch2_prediction_score <- predict_run(best_model, t_xval_ch1_ch2_feature_set[4])
+
+
+# ========================================
+# FORMAT
+# ========================================
+
+ch1_formatted_prediction_score <- format_run(ch1_prediction_score)
+ch2_formatted_prediction_score <- format_run(ch2_prediction_score)
+
+
+# ========================================
+# ARCHIVE
+# ========================================
