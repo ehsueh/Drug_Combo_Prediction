@@ -26,7 +26,12 @@ library(stringr)
 #     e.g. MODEL_PARAM<-list(hidden:c(300,300,300), epochs:1000)
 
 # MODEL_PARAM<-list(hidden:c(300,300,300), epochs:1000)
-train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END) {
+train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END, log_path, write_to_db = TRUE) {
+  
+  if (write_to_db) {
+   source("./feature_bank/dbUtils.R")
+  }
+  
   # set up a local cluster with 1GB RAM
   local_h2o = h2o.init(ip = "localhost", port = 54321, startH2O = TRUE)
   train_set <- importFile(train_path)
@@ -58,6 +63,16 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END)
       }
       # TODO: log this run
       print(paste("R2: ", r2, ", mse: ", mse, sep = ","))
+      write_to_master_log()
+      if (write_to_db) {
+        # connect to db 
+        con <- connectDreamDB()
+        # write params and results to database
+        
+        # close connection
+        dbDisconnect(con)
+      }
+      
     }
   }
 
