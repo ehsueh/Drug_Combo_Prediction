@@ -1,7 +1,10 @@
 # master.R should have set the working directory
 
-new_master_log_entry <- function()
+write_to_master_log <- function(id, xval, date, log_file_path){
+  new_row <- paste(id, xval, date, log_file_path, sep = ",0")
+  write.csv(new_row, "log/master_log.csv", append = TRUE)
+}
 
-new_log <- function(){
-  new_master_log_entry
+write_to_log_file <- function(path, msg){
+  write.csv(msg, path, append = TRUE)
 }

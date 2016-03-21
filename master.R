@@ -80,6 +80,15 @@ source("/archive/zipper.R")
 
 
 # ========================================
+# INITIALIZE LOG
+# ========================================
+# require to have master_log.csv and logs/ in Drug_Combo_Prediction/log/ before running this section
+
+# master_log_header <- paste("log id", "xval r2", "date", "log file path", "training time")
+######### Assume this file with header already exist!!!!!!!!!!#########################
+
+
+# ========================================
 # FEATURE PREPARATION
 # ========================================
 
