@@ -31,7 +31,7 @@ MODEL_PARAM <- list()
 # list of model parameters that map to their corresponding value or range
 # the pipeline will find the optimal value for all parameter to train the model
 # range: 
-# Example: list(h:c(300,300,300), e:1000)
+# Example: list(h=c(300,300,300), e=1000)
 
 COMPLETION_STAGE <- "S"
 # desired terminating process in the pipeline
@@ -94,6 +94,7 @@ t_xval_ch1_ch2_feature_set <- prep_run(PCA_FEATURE_NAMES, NON_PCA_FEATURE_NAMES)
 # ========================================
 
 best_model <- train_run(t_xval_ch1_ch2_feature_set[1], t_xval_ch1_ch2_feature_set[2], MODEL_PARAM)
+# train_run takes 3 parameters: paths to the training and xval set and the model parameter list
 # train_run returns the dnn model that gives the best xval score
 
 
@@ -116,3 +117,6 @@ ch2_formatted_prediction_score <- format_run(ch2_prediction_score)
 # ========================================
 # ARCHIVE
 # ========================================
+
+archive_run(ch1_confidence_path, ch1_formatted_prediction_score)
+archive_run(ch2_confidence_path, ch2_formatted_prediction_score)
