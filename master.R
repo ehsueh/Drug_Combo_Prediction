@@ -65,11 +65,11 @@ library(stringr)
 # FILE SOURCING
 # ========================================
 
-source("/prep/feature_prep.R")
-source("/train/h2o.R")
-source("/predict/h2o.R")
-source("/format/formatter.R")
-source("/archive/zipper.R")
+source("./prep/feature_prep.R")
+source("./train/h2o.R")
+source("./predict/h2o.R")
+source("./format/formatter.R")
+source("./archive/zipper.R")
 
 
 # ========================================
