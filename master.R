@@ -125,10 +125,12 @@ ch2_prediction_score <- predict_run(best_model, t_xval_ch1_ch2_feature_set[4])
 # FORMAT
 # ========================================
 
-ch1_formatted_prediction_score <- format_ch1(ch1_prediction_score)
-ch2_formatted_prediction_score <- format_ch2(ch2_prediction_score)
-# format_run convert the data into proper format and store it in .csv file
-# format_run return the path to the csv file
+ch1_formatted_prediction_score <- format_ch1(ch1_prediction_score, final = TRUE)
+ch2_formatted_prediction_score <- format_ch2(ch2_prediction_score, final = TRUE)
+# format_x convert the data into proper format and store it in .csv file
+# format_x return the path to the csv file
+# x determines the format: either challlenge 1 or challenge 2 format (ch1 or ch2)
+# final (boolean) indicates whether to format for the final round or for leaderboard rounds
 
 # ========================================
 # ARCHIVE
