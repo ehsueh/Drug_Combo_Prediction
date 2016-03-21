@@ -3,18 +3,26 @@
 # WRITE OUTPUT TO FILE
 # ==========================================================
 
-format_ch1 <- function(predictions) {
+format_ch1 <- function(predictions, final = FALSE) {
+  predictions <- unlist(predictions[,1])
   names(predictions) <- "PREDICTION"
-  # raw <- read.csv(paste("./sample_submission/ch1_leaderboard-prediction.csv"),header = TRUE,stringsAsFactors=FALSE)  
-  raw <- read.csv(paste("./sample_submission/ch1_final-prediction.csv"),header = TRUE,stringsAsFactors=FALSE)
+  format_file <- paste("./sample_submission/ch1_leaderboard-prediction.csv")
+  if (final == TRUE) { # format for final round, else, format for leaderboard
+    format_file <- paste("./sample_submission/ch1_final-prediction.csv")
+  }
+  raw <- read.csv(format_file,header = TRUE,stringsAsFactors=FALSE)  
   df <- data.frame(raw[1], raw[2], predictions)
   names(df) <- names(raw)
   return(df)
 }
 
-format_ch2 <- function(predictions) {
-  # raw <- read.csv(paste("./sample_submission/ch2_leaderboard-synergy_matrix.csv"),header = TRUE,stringsAsFactors=FALSE)
-  raw <- read.csv(paste("./sample_submission/ch2_final-synergy_matrix.csv"),header = TRUE,stringsAsFactors=FALSE)
+format_ch2 <- function(predictions, final = FALSE) {
+  predictions <- unlist(predictions[,1])
+  format_file <- paste("./sample_submission/ch2_leaderboard-synergy_matrix.csv")
+  if (final == TRUE) {
+    format_file <- paste("./sample_submission/ch2_final-synergy_matrix.csv")
+  }
+  raw <- read.csv(format_file,header = TRUE,stringsAsFactors=FALSE)  
   bin <- ifelse(matrix(data = predictions, ncol = 85, nrow = length(predictions)/85, byrow = TRUE) > 20, 1, 0)
   df <- rbind(str_replace_all(names(raw), pattern = "\\.", "-")[-1], bin)
   df <- cbind(rbind("", raw[1]), df)
