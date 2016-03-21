@@ -27,7 +27,13 @@ NON_PCA_FEATURE_NAMES <- c()
 # vector of features used to train model and predict result which does not require PCA
 # range: 
 
-MODEL_PARAM <- list()
+MODEL_PARAM_START <- list()
+# list of model parameters that map to their corresponding value or range
+# the pipeline will find the optimal value for all parameter to train the model
+# range: 
+# Example: list(h=c(300,300,300), e=1000)
+
+MODEL_PARAM_END <- list()
 # list of model parameters that map to their corresponding value or range
 # the pipeline will find the optimal value for all parameter to train the model
 # range: 
@@ -110,13 +116,16 @@ ch2_prediction_score <- predict_run(best_model, t_xval_ch1_ch2_feature_set[4])
 # FORMAT
 # ========================================
 
-ch1_formatted_prediction_score <- format_run(ch1_prediction_score)
-ch2_formatted_prediction_score <- format_run(ch2_prediction_score)
+ch1_formatted_prediction_path <- format_run(ch1_prediction_score)
+ch2_formatted_prediction_path <- format_run(ch2_prediction_score)
+# format_run convert the data into proper format and store it in .csv file
+# format_run return the path to the csv file
 
 
 # ========================================
 # ARCHIVE
 # ========================================
 
-archive_run(ch1_confidence_path, ch1_formatted_prediction_score)
-archive_run(ch2_confidence_path, ch2_formatted_prediction_score)
+archive_run(ch1_confidence_path, ch1_formatted_prediction_path, 1)
+archive_run(ch2_confidence_path, ch2_formatted_prediction_path, 2)
+# input: confidence path, prediction path, challenge index (1 is 1a and 2 is 2)
