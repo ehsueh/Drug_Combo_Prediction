@@ -6,5 +6,5 @@ write_to_master_log <- function(file, features, dropout, hidden, epochs, train_r
 }
 
 write_to_log_file <- function(msg){
-  write.csv(msg, LOG_PATH, append = TRUE)
+  write(msg, LOG_PATH, append = TRUE)
 }

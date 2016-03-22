@@ -84,14 +84,27 @@ log_count <- length(list.files("./log/logs/"))
 
 
 # ========================================
-# CREATE LOG FILE
+# INITIALIZE LOG FILE & MASTER LOG ENGRY
 # ========================================
 # require to have master_log.csv and logs/ in Drug_Combo_Prediction/log/ before running this section
 
-log_count <- log_count + 1
-log_file_path <- paste("log/logs/log", log_count, ".txt", sep = "")
-file.create(log_file_path)
-write(paste("log ID:\tlog", log_count, sep = ""), log_file_path, append = TRUE)
+write_to_log_file("Run Name")
+write_to_log_file(paste("\t", RUN_NAME,sep = ""))
+write_to_log_file("Cross Validation to Training Ratio")
+write_to_log_file(paste("\t", XVAL2TRAIN_RATIO,sep = ""))
+write_to_log_file("Total Features")
+write_to_log_file(paste("\t", TOTAL_FEATURES,sep = ""))
+write_to_log_file("PCA Features")
+write_to_log_file(paste("\t", PCA_FEATURES,sep = ""))
+write_to_log_file("Swap Features")
+write_to_log_file(paste("\t", SWAP_FEATURES,sep = ""))
+write_to_log_file("Model Parameter Start")
+write_to_log_file(paste("\t", MODEL_PARAM_START,sep = ""))
+write_to_log_file("Model Parameter End")
+write_to_log_file(paste("\t", MODEL_PARAM_END,sep = ""))
+write_to_log_file("Completion Stage")
+write_to_log_file(paste("\t", COMPLETION_STAGE,sep = ""))
+
 
 
 # ========================================
