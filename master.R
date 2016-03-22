@@ -32,13 +32,13 @@ PCA_FEATURES <- c("monotherapy_normalized_avg_imputed")
 
 SWAP_FEATURES <- c("monotherapy_normalized_avg_imputed", "drug_pchem")
 
-MODEL_PARAM_START <- list(hidden=c(300, 300, 300), epoch=1000)
+MODEL_PARAM_START <- list(dropout=c(0.3,0.3,0.3), hidden=c(300, 300, 300), epoch=1000)
 # list of model parameters that map to their corresponding value or range
 # the pipeline will find the optimal value for all parameter to train the model
 # range: 
 # Example: list(h=c(300,300,300), e=1000)
 
-MODEL_PARAM_END <- list(hidden=c(300, 300, 300), epoch=1000)
+MODEL_PARAM_END <- list(dropout=c(0.3,0.3,0.3), hidden=c(300, 300, 300), epoch=1000)
 # list of model parameters that map to their corresponding value or range
 # the pipeline will find the optimal value for all parameter to train the model
 # range: 

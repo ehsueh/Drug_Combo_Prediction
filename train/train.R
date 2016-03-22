@@ -26,11 +26,11 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
 # TO-DO: Not yet implemetned DB logging
 #   if (write_to_db) {
 #    source("./feature_bank/dbUtils.R")
-#    setwd(MASTERDIR)
+   # setwd(MASTERDIR)
 #   }
   
   # set up a local cluster with 1GB RAM
-  local_h2o = h2o.init(ip = "localhost", port = 54321, startH2O = TRUE)
+  # local_h2o = h2o.init(ip = "localhost", port = 54321, startH2O = TRUE)
   train_set <- h2o.importFile(train_path)
   xval_set <- h2o.importFile(xval_path)
   
@@ -46,15 +46,24 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
   h_inc <- round((h_end - h_start)/num_runs)
   e_inc <- round((e_end - e_start)/num_runs)
   
-  best_nn <- NA # best neural net by validation R2
-  best_r2 <- NA # R2 of the best neural net
+  best_nn <- NULL # best neural net by validation R2
+  best_r2 <- NULL # R2 of the best neural net
   
   for (i in 1:num_runs) {
     for (j in 1:num_runs) {
       h <- h_start + h_inc*(i-1)
       e <- e_start + e_inc*(i-1)
       print(paste("Hidden layers: ", h, ", epochs: ", e, sep = ""))
-      nn <- train(d,h,e)
+      nn <- h2o.deeplearning(x = 2: ncol(train_set),
+                             y = 1,
+                             training_frame = train_set,
+                             validation_frame = xval_set,
+                             activation = "RectifierWithDropout",
+                             input_dropout_ratio = 0.2,
+                             hidden_dropout_ratios = c(d),
+                             hidden = c(h), 
+                             epochs = e)
+      
       r2 <- h2o.r2(nn, valid = TRUE)
       if (r2 > best_r2) {
         best_r2 <- r2(nn)
