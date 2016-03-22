@@ -12,8 +12,8 @@
 # ========================================
 # set parameters for the pipeline
 
-# setwd("/home/zack/Drug_Combo_Prediction")
-setwd("/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction")
+setwd("/home/zack/Drug_Combo_Prediction")
+# setwd("/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction")
 # set working directory to location of Drug_Combo_Prediction folder
 
 RUN_NAME <- "apple"
@@ -74,6 +74,7 @@ source("./train/train.R")
 source("./predict/predict.R")
 source("./format/formatter.R")
 source("./archive/zipper.R")
+source("./log/logger.R")
 
 
 # ========================================
