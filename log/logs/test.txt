@@ -1,0 +1,23 @@
+Run Name
+	test
+Training to Cross Validation Ratio
+	0.75
+Total Features
+	monotherapy_normalized_avg_imputed
+	drug_pchem
+	string_gex
+PCA Features
+	monotherapy_normalized_avg_imputed
+Swap Features
+	monotherapy_normalized_avg_imputed
+	drug_pchem
+Model Parameter Start
+	c(0.3, 0.3, 0.3)
+	c(300, 300, 300)
+	1000
+Model Parameter End
+	c(0.3, 0.3, 0.3)
+	c(300, 300, 300)
+	1000
+Completion Stage
+	A
