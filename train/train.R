@@ -23,14 +23,16 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
   write_to_log_file("######################## TRAINING STARTS ########################")
   output_file <- paste("./predict/predictions/", RUN_NAME, "-model.RData")
   write_to_log_file(paste("Output file: ", output_file))
-  if (write_to_db) {
-   source("./feature_bank/dbUtils.R")
-  }
+# TO-DO: Not yet implemetned DB logging
+#   if (write_to_db) {
+#    source("./feature_bank/dbUtils.R")
+#    setwd(MASTERDIR)
+#   }
   
   # set up a local cluster with 1GB RAM
   local_h2o = h2o.init(ip = "localhost", port = 54321, startH2O = TRUE)
-  train_set <- importFile(train_path)
-  xval_set <- importFile(xval_path)
+  train_set <- h2o.importFile(train_path)
+  xval_set <- h2o.importFile(xval_path)
   
   # after some runs with different param settings, 
   # these two are the only interesting 
