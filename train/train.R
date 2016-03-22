@@ -6,13 +6,6 @@ if (! require(h2o, quietly=TRUE)) {
                    repos="http://cran.us.r-project.org")
   library(h2o)
 }
-# if you get a RCurl missing dependency problem, install it:
-# sudo apt-get install libcurl4-openssl-dev
-if (! require(ggplot2, quietly=TRUE)) {
-  install.packages("ggplot2",
-                   repos="http://cran.us.r-project.org")
-  library(ggplot2)
-}
 
 library(stringr)
 
@@ -42,18 +35,19 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
   # after some runs with different param settings, 
   # these two are the only interesting 
   # params that end up improving the model so far
+  num_runs <- 3
   h_start <- MODEL_PARAM_START$hidden
   e_start <- MODEL_PARAM_START$epochs
   h_end <- MODEL_PARAM_END$hidden
   e_end <- MODEL_PARAM_END$epochs
-  h_inc <- (h_end - h_start)/5
-  e_inc <- (e_end - e_start)/5
+  h_inc <- round((h_end - h_start)/num_runs)
+  e_inc <- round((e_end - e_start)/num_runs)
   
   best_nn <- NA # best neural net by validation R2
   best_r2 <- NA # R2 of the best neural net
   
-  for (i in 1:5) {
-    for (j in 1:5) {
+  for (i in 1:num_runs) {
+    for (j in 1:num_runs) {
       h <- h_start + h_inc*(i-1)
       e <- e_start + e_inc*(i-1)
       print(paste("Hidden layers: ", h, ", epochs: ", e, sep = ""))
@@ -66,7 +60,7 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
       
       # log this run
       print(paste("R2: ", r2, ", mse: ", mse, sep = ","))
-      write_to_log_file()
+      write_to_log_file(summary(nn))
       
       if (write_to_db) {
         # connect to db 
