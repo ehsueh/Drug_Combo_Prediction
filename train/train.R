@@ -70,53 +70,12 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
         # close connection
         dbDisconnect(con)
       }
-      
+      write_to_master_log(id, train_r2, xval_r2)      
     }
   }
-  write_to_master_log(id, train_r2, xval_r2)
-  
+
   # saving results and logging
   save(best_nn, file = output_file)
   write_to_log_file("######################## TRAINING ENDS ##########################")
 
 }
-
-# train <- function(h, e) {
-#   nn <- h2o.deeplearning(x = 2: ncol(dataH2o),
-#                               y = 1,
-#                               training_frame = dataTrainH2o,
-#                               validation_frame = dataXValH2o,
-#                               activation = "RectifierWithDropout",
-#                               input_dropout_ratio = 0.2,
-#                               hidden_dropout_ratios = c(0.5),
-#                               # adaptive_rate = TRUE,
-#                             # not as good
-#                               # adaptive_rate = FALSE,
-#                               # momentum_start = 0.5,
-#                               # momentum_stable = 0.99,
-#                               # rate = 0.01,
-#                             # no good
-#                               # stopping_rounds = 6,
-#                               # stopping_metric = "AUTO",
-#                               # distribution = "gaussian",
-#                               hidden = c(h), 
-#                               epochs = e)
-#   header <- col.names(nn_run_history)
-#   new <- cbind(h, e, h2o.mse(nn,train = TRUE), h2o.r2(nn,train = TRUE), h2o.mse(nn,valid = TRUE), h2o.r2(nn,valid = TRUE))
-#   nn_run_history <- rbind(nn_run_history, new)
-#   colnames(nn_run_history) <- header
-#   return(nn)
-# }
-
-# nn_run_history <- data.frame(row.names = c("hidden", "epochs", "train_mse", "train_r2", "xval_mse", "xval_r2"), stringsAsFactors = FALSE)
-# header <- c("hidden", "epochs", "train_mse", "train_r2", "xval_mse", "xval_r2")
-
-
-h2o.performance(nn1)
-h2o.performance(tree)
-
-h2oXValPredictions <- h2o.predict(nn1, dataXValH2o)
-y <- as.numeric(unlist(as.data.frame(h2oXValPredictions))) >= 20
-y_ <- as.numeric(unlist(as.data.frame(targetXValH2o))) >= 20
-xval <- length(which((y == y_) == TRUE))/length(y)
-# can also compare sensitivity and specificity
