@@ -13,13 +13,14 @@
 # set parameters for the pipeline
 
 # setwd("/home/zack/Drug_Combo_Prediction")
-setwd("/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction")
 # set working directory to location of Drug_Combo_Prediction folder
+MASTERDIR <- "/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction/"
+setwd(MASTERDIR)
 
 RUN_NAME <- "apple"
 LOG_PATH <- paste("./log/logs/", RUN_NAME, ".txt", sep = "")
 
-XVAL2TRAIN_RATIO <- 0.3
+TRAIN2XVAL_RATIO <- 0.75
 # proportion of the training set used for cross validation
 # range: 0 to 1
 
@@ -74,7 +75,7 @@ source("./train/train.R")
 source("./predict/predict.R")
 source("./format/formatter.R")
 source("./archive/zipper.R")
-
+source("./log/logger.R")
 
 # ========================================
 # GLOBAL VARIABLE
@@ -98,14 +99,13 @@ write(paste("log ID:\tlog", log_count, sep = ""), log_file_path, append = TRUE)
 # FEATURE PREPARATION
 # ========================================
 
-load("/feature_bank/monotherapy_normalized_avg_imputed.RData")
 # from feature_bank folder loads multiple feature matrices that are separated by functionality
 # dimension:
 #   row - 1794 + 1089 + 31535 (training feature set + ch 1a feature set + ch 2 feature set without duplication)
 #   col - depends like the feature group
 
 
-t_xval_ch1_ch2_feature_set <- prep_run(TOTAL_FEATURES, PCA_FEATURES, SWAP_FEATURES, XVAL2TRAIN_RATIO, use_pred_for_pca, base_name)
+t_xval_ch1_ch2_feature_set <- prep_run(TOTAL_FEATURES, PCA_FEATURES, SWAP_FEATURES, TRAIN2XVAL_RATIO, use_pred_for_pca = TRUE, base_name = RUN_NAME)
 # input 
 #   TOTAL_FEATURES:   vector containing all the features for training
 #   PCA_FEATURES:     vector containing features to pca

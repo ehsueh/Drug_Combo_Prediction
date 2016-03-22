@@ -1,13 +1,3 @@
-FEATURE_DIR <- "./feature_bank/"
-OUT_DIR <- "./prep/h2o_feature/"
-
-# load relevant triplets (training, ch1 and ch2 for final round)
-load(paste(FEATURE_DIR, "triplets.RData", sep = "/"))
-# number of samples for the different sets
-NUM_UNIQ_TRAIN <- dim(training_triplets_and_syn_scores)[1] # unique training set
-NUM_PRED_CH1 <- dim(ch1_triplets)[1] # challenge 1 prediction set
-NUM_PRED_CH2 <- dim(ch2_triplets)[1] # challenge 2 prediction set
-
 # if data has N/A, impute it first before running PCA
 # e.g. if raw_features contains N/A... 
 # imputed_feature <- as.data.frame(apply(raw_feature, 2, replace_non_num))
@@ -35,7 +25,30 @@ sym_expand <- function(uniq_train_set, swap = FALSE) {
 }
 
 # swap_list are the features (drug related) that needs to be duplicated in a special way (swap) to account for symmetry
-prep_run <- function(train2xval_ratio, union_set, pca_list, swap_list, use_pred_for_pca, base_name) {
+prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_for_pca, base_name) {
+  write_to_log_file("######################## PREPARATION STARTS #####################")
+
+  FEATURE_DIR <- paste(MASTERDIR, "./feature_bank/", sep = "")
+  OUT_DIR <- paste(MASTERDIR, "./prep/h2o_feature/", sep = "")
+  
+  # load relevant triplets (training, ch1 and ch2 for final round)
+  load(paste(FEATURE_DIR, "triplets.RData", sep = "/"))
+  # number of samples for the different sets
+  NUM_UNIQ_TRAIN <- dim(training_triplets_and_syn_scores)[1] # unique training set
+  NUM_PRED_CH1 <- dim(ch1_triplets)[1] # challenge 1 prediction set
+  NUM_PRED_CH2 <- dim(ch2_triplets)[1] # challenge 2 prediction set
+  
+  train_file <- paste(OUT_DIR, base_name, "_train.csv", sep = "")
+  xval_file <- paste(OUT_DIR, base_name, "_xval.csv", sep = "")
+  pred1_file <- paste(OUT_DIR, base_name, "_pred1.csv", sep = "")
+  pred2_file <- paste(OUT_DIR, base_name, "_pred2.csv", sep = "")  
+
+  # logging
+  write_to_log_file("Output:")
+  write_to_log_file(train_file)
+  write_to_log_file(xval_file)
+  write_to_log_file(pred1_file)
+  write_to_log_file(pred2_file)
   
   # split training set into training and cross validation sets based on indicated ratio
   train_idx <- sample(1:NUM_UNIQ_TRAIN, round(NUM_UNIQ_TRAIN*train2xval_ratio))
@@ -46,21 +59,22 @@ prep_run <- function(train2xval_ratio, union_set, pca_list, swap_list, use_pred_
   for (path in union_set) {
     load(paste(FEATURE_DIR, path, ".RData", sep = ""))
     set <- get(path)
-    if ("N/A"%in%set) { # impute N/A  note: can expand this to look for other strings or look for NULL or NA
-      set <- as.data.frame(apply(set, 2, replace_non_num))
-    }
+#     if ("N/A"%in%set) { # impute N/A  note: can expand this to look for other strings or look for NULL or NA
+#       set <- as.data.frame(apply(set, 2, replace_non_num))
+#     }
     
-    train <- set[train_idx,]
-    xval <- set[-train_idx,]
+    temp <- set[1:NUM_UNIQ_TRAIN,]
+    train <- temp[train_idx,]
+    xval <- temp[-train_idx,]
     pred1 <- set[(NUM_UNIQ_TRAIN+1):(NUM_UNIQ_TRAIN + NUM_PRED_CH1),]
-    pred2 <- set[(NUM_PRED_CH1+1):(NUM_UNIQ_TRAIN + NUM_PRED_CH1 + NUM_PRED_CH2),]    
+    pred2 <- set[(NUM_UNIQ_TRAIN + NUM_PRED_CH1+1):(NUM_UNIQ_TRAIN + NUM_PRED_CH1 + NUM_PRED_CH2),]    
     
     # prepare training set
     # train set must take into account of symmetry
-    train <- sym_expand(train, swap = set%in%swap_list)
+    train <- sym_expand(train, path%in%swap_list)
     
     # if set needs pca 
-    if (set%in%pca_list) {
+    if (path%in%pca_list) {
       data_for_pca <- train
       if (use_pred_for_pca) {
         data_for_pca <- rbind(data_for_pca, pred1, pred2)
@@ -79,11 +93,11 @@ prep_run <- function(train2xval_ratio, union_set, pca_list, swap_list, use_pred_
     # attach synergies scores as label for train and xval set
     train <- cbind(train_synergies, train)
     xval <- cbind(xval_synergies, xval)
-    
-    write.table(train, paste(OUT_DIR, base_name, "_train.csv", sep = ""), col.names = FALSE, row.names = FALSE, sep = ",")
-    write.table(xval, paste(OUT_DIR, base_name, "_xval.csv", sep = ""), col.names = FALSE, row.names = FALSE, sep = ",")
-    write.table(pred1, paste(OUT_DIR, base_name, "_pred1.csv", sep = ""), col.names = FALSE, row.names = FALSE, sep = ",")
-    write.table(pred2, paste(OUT_DIR, base_name, "_pred2.csv", sep = ""), col.names = FALSE, row.names = FALSE, sep = ",")
-    
+      
+    write.table(train, train_file , col.names = FALSE, row.names = FALSE, sep = ",")
+    write.table(xval, xval_file, col.names = FALSE, row.names = FALSE, sep = ",")
+    write.table(pred1, pred1_file, col.names = FALSE, row.names = FALSE, sep = ",")
+    write.table(pred2, pred2_file, col.names = FALSE, row.names = FALSE, sep = ",")
+    write_to_log_file("######################## PREPARATION ENDS #######################")
   }
 }
