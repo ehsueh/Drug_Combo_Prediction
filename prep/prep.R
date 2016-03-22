@@ -68,7 +68,7 @@ prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_
 #       set <- as.data.frame(apply(set, 2, replace_non_num))
 #     }
     
-    temp <- set[1:NUM_UNIQ_TRAIN,]
+    temp <- set[1:NUM_UNIQ_TRAIN,]tx
     train <- temp[train_idx,]
     xval <- temp[-train_idx,]
     pred1 <- set[(NUM_UNIQ_TRAIN+1):(NUM_UNIQ_TRAIN + NUM_PRED_CH1),]
@@ -105,10 +105,10 @@ prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_
   train <- cbind(train_synergies, train)
   xval <- cbind(xval_synergies, xval)
   
-  write.table(train, train_file , col.names = FALSE, row.names = FALSE, sep = ",")
-  write.table(xval, xval_file, col.names = FALSE, row.names = FALSE, sep = ",")
-  write.table(pred1, pred1_file, col.names = FALSE, row.names = FALSE, sep = ",")
-  write.table(pred2, pred2_file, col.names = FALSE, row.names = FALSE, sep = ",")
+  write.table(train_all, train_file , col.names = FALSE, row.names = FALSE, sep = ",")
+  write.table(xval_all, xval_file, col.names = FALSE, row.names = FALSE, sep = ",")
+  write.table(pred1_all, pred1_file, col.names = FALSE, row.names = FALSE, sep = ",")
+  write.table(pred2_all, pred2_file, col.names = FALSE, row.names = FALSE, sep = ",")
   write_to_log_file("######################## PREPARATION ENDS #######################")
   return(c(train_file, xval_file, pred1_file, pred2_file))
 }
