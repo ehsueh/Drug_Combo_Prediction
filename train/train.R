@@ -26,8 +26,10 @@ library(stringr)
 #     e.g. MODEL_PARAM<-list(hidden:c(300,300,300), epochs:1000)
 
 # MODEL_PARAM<-list(hidden:c(300,300,300), epochs:1000)
-train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END, log_path, write_to_db = TRUE) {
-  
+train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END, log_info, write_to_db = TRUE) {
+  write_to_log_file("######################## TRAINING STARTS ########################")
+  output_file <- paste("./predict/predictions/", RUN_NAME, "-model.RData")
+  write_to_log_file(paste("Output file: ", output_file))
   if (write_to_db) {
    source("./feature_bank/dbUtils.R")
   }
@@ -61,20 +63,27 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
         best_r2 <- r2(nn)
         best_nn <- nn
       }
-      # TODO: log this run
+      
+      # log this run
       print(paste("R2: ", r2, ", mse: ", mse, sep = ","))
-      write_to_master_log()
+      write_to_log_file()
+      
       if (write_to_db) {
         # connect to db 
         con <- connectDreamDB()
         # write params and results to database
-        
+        # To-Do: finish stuff here
         # close connection
         dbDisconnect(con)
       }
       
     }
   }
+  write_to_master_log(id, train_r2, xval_r2)
+  
+  # saving results and logging
+  save(best_nn, file = output_file)
+  write_to_log_file("######################## TRAINING ENDS ##########################")
 
 }
 

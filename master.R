@@ -15,6 +15,9 @@
 setwd("/home/zack/Drug_Combo_Prediction")
 # set working directory to location of Drug_Combo_Prediction folder
 
+RUN_NAME <- "apple"
+LOG_PATH <- paste("./log/logs/", RUN_NAME, ".txt", sep = "")
+
 XVAL2TRAIN_RATIO <- 0.3
 # proportion of the training set used for cross validation
 # range: 0 to 1

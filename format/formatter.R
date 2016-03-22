@@ -4,6 +4,7 @@
 # ==========================================================
 
 format_ch1 <- function(predictions, final = FALSE) {
+  write_to_log_file("######################## FORMATTING STARTS ######################")
   predictions <- unlist(predictions[,1])
   names(predictions) <- "PREDICTION"
   format_file <- paste("./sample_submission/ch1_leaderboard-prediction.csv")
@@ -13,10 +14,16 @@ format_ch1 <- function(predictions, final = FALSE) {
   raw <- read.csv(format_file,header = TRUE,stringsAsFactors=FALSE)  
   df <- data.frame(raw[1], raw[2], predictions)
   names(df) <- names(raw)
-  return(df)
+  # saving results and logging
+  output_file <- paste("./format/formatted/", RUN_NAME, "-ch1_formatted.csv")
+  write.table(df, file = output_file, row.names = FALSE, col.names = FALSE, append = FALSE)
+  write_to_log_file(paste("Output file: ", output_file))
+  write_to_log_file("######################## FORMATTING ENDS ########################")
+  return(output_file)
 }
 
 format_ch2 <- function(predictions, final = FALSE) {
+  write_to_log_file("######################## FORMATTING STARTS ######################")
   predictions <- unlist(predictions[,1])
   format_file <- paste("./sample_submission/ch2_leaderboard-synergy_matrix.csv")
   if (final == TRUE) {
@@ -26,7 +33,12 @@ format_ch2 <- function(predictions, final = FALSE) {
   bin <- ifelse(matrix(data = predictions, ncol = 85, nrow = length(predictions)/85, byrow = TRUE) > 20, 1, 0)
   df <- rbind(str_replace_all(names(raw), pattern = "\\.", "-")[-1], bin)
   df <- cbind(rbind("", raw[1]), df)
-  return(df)
+  # saving results and logging
+  output_file <- paste("./format/formatted/", RUN_NAME, "-ch2_formatted.csv")
+  write.table(df, file = output_file, row.names = FALSE, col.names = FALSE, append = FALSE)
+  write_to_log_file(paste("Output file: ", output_file))
+  write_to_log_file("######################## FORMATTING ENDS ########################")
+  return(output_file)
 }
 
 # write output to file
