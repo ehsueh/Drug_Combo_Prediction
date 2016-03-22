@@ -19,13 +19,13 @@ library(stringr)
 predict_run <- function(model, prediction_path) {
   write_to_log_file("######################## PREDICTION STARTS ######################")
   # set up a local cluster with 1GB RAM
-  localH2o = h2o.init(ip = "localhost", port = 54321, startH2O = TRUE)
-  prediction_set <- importFile(prediction_path)
-  predictions <- h2o.predict(nn, prediction_set)
+  # localH2o = h2o.init(ip = "localhost", port = 54321, startH2O = TRUE)
+  prediction_set <- h2o.importFile(prediction_path)
+  predictions <- h2o.predict(model, prediction_set)
   synergies <- as.numeric(unlist(as.data.frame(predictions)))
-  results <- cbind(synergies, prediction_set)
+  results <- cbind(synergies, as.data.frame(prediction_set))
   # saving results and logging
-  output_file <- paste("./predict/predictions/", RUN_NAME, "-predictions.RData")
+  output_file <- paste("./predict/predictions/", RUN_NAME, "-predictions.RData", sep = )
   save(results, file = output_file)
   write_to_log_file(paste("Output file: ", output_file))
   write_to_log_file("######################## PREDICTION ENDS ########################")
