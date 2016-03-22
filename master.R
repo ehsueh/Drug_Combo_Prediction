@@ -77,13 +77,6 @@ source("./archive/zipper.R")
 
 
 # ========================================
-# GLOBAL VARIABLE
-# ========================================
-
-log_count <- length(list.files("./log/logs/"))
-
-
-# ========================================
 # INITIALIZE LOG FILE & MASTER LOG ENGRY
 # ========================================
 # require to have master_log.csv and logs/ in Drug_Combo_Prediction/log/ before running this section
@@ -105,6 +98,14 @@ write_to_log_file(paste("\t", MODEL_PARAM_END,sep = ""))
 write_to_log_file("Completion Stage")
 write_to_log_file(paste("\t", COMPLETION_STAGE,sep = ""))
 
+master_log_entry_head <- c(LOG_PATH, list(run_name=RUN_NAME, 
+                                          xval2train_ratio=XVAL2TRAIN_RATIO, 
+                                          total_features=TOTAL_FEATURES,
+                                          pca_features=PCA_FEATURES,
+                                          swap_features=SWAP_FEATURES,
+                                          model_param_start=MODEL_PARAM_START,
+                                          model_param_end=MODEL_PARAM_END,
+                                          completion_stage=COMPLETION_STAGE))
 
 
 # ========================================
@@ -136,7 +137,7 @@ t_xval_ch1_ch2_feature_set <- prep_run(TOTAL_FEATURES, PCA_FEATURES, SWAP_FEATUR
 # NEURAL NETWORK TRAINING
 # ========================================
 
-best_model <- train_run(t_xval_ch1_ch2_feature_set[1], t_xval_ch1_ch2_feature_set[2], MODEL_PARAM_START, MODEL_PARAM_END, log_file_path, SWAP_FEATURES, TRUE)
+best_model <- train_run(t_xval_ch1_ch2_feature_set[1], t_xval_ch1_ch2_feature_set[2], MODEL_PARAM_START, MODEL_PARAM_END, log_file_path, SWAP_FEATURES, master_log_entry_head, TRUE)
 # input
 #   t_xval_ch1_ch2_feature_set[1]:  feature set for training models
 #   t_xval_ch1_ch2_feature_set[2]:  feature set for cross validating the trained model
