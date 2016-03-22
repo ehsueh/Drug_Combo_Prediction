@@ -16,7 +16,7 @@ library(stringr)
 #     and the remaining are the prediction features
 # model is the model to be used for prediction and
 # prediction_path (string) is the path of the file storing the prediction samples
-predict_run() <- function(model, prediction_path) {
+predict_run <- function(model, prediction_path) {
   write_to_log_file("######################## PREDICTION STARTS ######################")
   # set up a local cluster with 1GB RAM
   localH2o = h2o.init(ip = "localhost", port = 54321, startH2O = TRUE)

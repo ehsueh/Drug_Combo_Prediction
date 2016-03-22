@@ -12,7 +12,8 @@
 # ========================================
 # set parameters for the pipeline
 
-setwd("/home/zack/Drug_Combo_Prediction")
+# setwd("/home/zack/Drug_Combo_Prediction")
+setwd("/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction")
 # set working directory to location of Drug_Combo_Prediction folder
 
 RUN_NAME <- "apple"
@@ -42,7 +43,7 @@ MODEL_PARAM_END <- list(hidden=c(300, 300, 300), epoch=1000)
 # range: 
 # Example: list(h=c(300,300,300), e=1000)
 
-COMPLETION_STAGE <- "S"
+COMPLETION_STAGE <- "A"
 # desired terminating process in the pipeline
 # range:
 #   T - training process
