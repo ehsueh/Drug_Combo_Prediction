@@ -13,8 +13,8 @@
 # set parameters for the pipeline
 
 # set working directory to location of Drug_Combo_Prediction folder
-# MASTERDIR <- "/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction/"
-MASTERDIR <- "/home/zack/Drug_Combo_Prediction/"
+MASTERDIR <- "/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction/"
+# MASTERDIR <- "/home/zack/Drug_Combo_Prediction/"
 setwd(MASTERDIR)
 
 RUN_NAME <- "test"
@@ -24,7 +24,7 @@ TRAIN2XVAL_RATIO <- 0.75
 # proportion of the training set used for cross validation
 # range: 0 to 1
 
-TOTAL_FEATURES <- c("monotherapy_normalized_avg_imputed", "drug_pchem", "string_gex", "triplets")
+TOTAL_FEATURES <- c("monotherapy_normalized_avg_imputed", "drug_pchem", "string_gex")
 
 PCA_FEATURES <- c("monotherapy_normalized_avg_imputed")
 # vector of features used to train model and predict result which require PCA
