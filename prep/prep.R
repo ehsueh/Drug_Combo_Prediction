@@ -110,5 +110,5 @@ prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_
   write.table(pred1, pred1_file, col.names = FALSE, row.names = FALSE, sep = ",")
   write.table(pred2, pred2_file, col.names = FALSE, row.names = FALSE, sep = ",")
   write_to_log_file("######################## PREPARATION ENDS #######################")
-  
+  return(c(train_file, xval_file, pred1_file, pred2_file))
 }

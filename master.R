@@ -137,13 +137,12 @@ t_xval_ch1_ch2_feature_set <- prep_run(TOTAL_FEATURES, PCA_FEATURES, SWAP_FEATUR
 # NEURAL NETWORK TRAINING
 # ========================================
 
-best_model <- train_run(t_xval_ch1_ch2_feature_set[1], t_xval_ch1_ch2_feature_set[2], MODEL_PARAM_START, MODEL_PARAM_END, log_file_path, SWAP_FEATURES, master_log_entry_head, TRUE)
+best_model <- train_run(t_xval_ch1_ch2_feature_set[1], t_xval_ch1_ch2_feature_set[2], MODEL_PARAM_START, MODEL_PARAM_END, master_log_entry_head, TRUE)
 # input
 #   t_xval_ch1_ch2_feature_set[1]:  feature set for training models
 #   t_xval_ch1_ch2_feature_set[2]:  feature set for cross validating the trained model
 #   MODEL_PARAM_START:              start value for model training parameter range, same as end if it's a value
 #   MODEL_PARAM_END:                end value for model training parameter range, same as start if it's a value
-#   log_file_path:                  path to the log file for this training
 #   TRUE:                           boolean value indicating whether the training result should be saved in database
 # return
 #   trained h2o model 
