@@ -12,10 +12,10 @@
 # ========================================
 # set parameters for the pipeline
 
-# setwd("/home/zack/Drug_Combo_Prediction")
+setwd("/home/zack/Drug_Combo_Prediction")
 # set working directory to location of Drug_Combo_Prediction folder
-MASTERDIR <- "/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction/"
-setwd(MASTERDIR)
+# MASTERDIR <- "/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction/"
+# setwd(MASTERDIR)
 
 RUN_NAME <- "test"
 LOG_PATH <- paste("./log/logs/", RUN_NAME, ".txt", sep = "")
@@ -82,11 +82,10 @@ source("./log/logger.R")
 # ========================================
 # require to have master_log.csv and logs/ in Drug_Combo_Prediction/log/ before running this section
 
-dir.create("./log/logs/")
 write_to_log_file("Run Name")
 write_to_log_file(paste("\t", RUN_NAME,sep = ""))
-write_to_log_file("Cross Validation to Training Ratio")
-write_to_log_file(paste("\t", XVAL2TRAIN_RATIO,sep = ""))
+write_to_log_file("Training to Cross Validation Ratio")
+write_to_log_file(paste("\t", TRAIN2XVAL_RATIO,sep = ""))
 write_to_log_file("Total Features")
 write_to_log_file(paste("\t", TOTAL_FEATURES,sep = ""))
 write_to_log_file("PCA Features")
@@ -101,7 +100,7 @@ write_to_log_file("Completion Stage")
 write_to_log_file(paste("\t", COMPLETION_STAGE,sep = ""))
 
 master_log_entry_head <- c(LOG_PATH, list(run_name=RUN_NAME, 
-                                          xval2train_ratio=XVAL2TRAIN_RATIO, 
+                                          train2xval_ratio=TRAIN2XVAL_RATIO, 
                                           total_features=TOTAL_FEATURES,
                                           pca_features=PCA_FEATURES,
                                           swap_features=SWAP_FEATURES,
@@ -125,7 +124,7 @@ t_xval_ch1_ch2_feature_set <- prep_run(TOTAL_FEATURES, PCA_FEATURES, SWAP_FEATUR
 #   TOTAL_FEATURES:   vector containing all the features for training
 #   PCA_FEATURES:     vector containing features to pca
 #   SWAP_FEATURES:    vector containing features to swap for symmetry
-#   XVAL2TRAIN_RATIO: proportion of cross validation set to original training set
+#   TRAIN2XVAL_RATIO: proportion of new training set to original training set
 #   use_pred_for_pca: boolean value indicating whether prediction feature sets are involved in pca
 #   base_name:        base file name for prepared training, xval, ch1 and ch2 feature set
 # return
