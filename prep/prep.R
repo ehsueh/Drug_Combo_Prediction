@@ -53,7 +53,7 @@ prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_
   # split training set into training and cross validation sets based on indicated ratio
   train_idx <- sample(1:NUM_UNIQ_TRAIN, round(NUM_UNIQ_TRAIN*train2xval_ratio))
   train_synergies <- training_triplets_and_syn_scores[train_idx,4]
-  train_synergies <- rbind(train_synergies, train_synergies)
+  train_synergies <- c(train_synergies, train_synergies)
   xval_synergies <- training_triplets_and_syn_scores[-train_idx,4]
   
   for (path in union_set) {
