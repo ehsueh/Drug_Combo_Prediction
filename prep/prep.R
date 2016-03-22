@@ -56,6 +56,11 @@ prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_
   train_synergies <- c(train_synergies, train_synergies)
   xval_synergies <- training_triplets_and_syn_scores[-train_idx,4]
   
+  train_all <- NULL
+  xval_all <- NULL
+  pred1_all <- NULL
+  pred2_all <- NULL
+  
   for (path in union_set) {
     load(paste(FEATURE_DIR, path, ".RData", sep = ""))
     set <- get(path)
@@ -89,14 +94,21 @@ prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_
       pred2 <-predict(pca, pred2)[,1:num_cols]  
     }
     
-    # attach synergies scores as label for train and xval set
-    train <- cbind(train_synergies, train)
-    xval <- cbind(xval_synergies, xval)
-      
-    write.table(train, train_file , col.names = FALSE, row.names = FALSE, sep = ",")
-    write.table(xval, xval_file, col.names = FALSE, row.names = FALSE, sep = ",")
-    write.table(pred1, pred1_file, col.names = FALSE, row.names = FALSE, sep = ",")
-    write.table(pred2, pred2_file, col.names = FALSE, row.names = FALSE, sep = ",")
-    write_to_log_file("######################## PREPARATION ENDS #######################")
+    train_all <- cbind(train_all, train)
+    xval_all <- cbind(xvall_all, xval)
+    pred1_all <- cbind(pred1_all, pred1)
+    pred2_all <- cbind(pred2_all, pred2)
+    
   }
+  
+  # attach synergies scores as label for train and xval set
+  train <- cbind(train_synergies, train)
+  xval <- cbind(xval_synergies, xval)
+  
+  write.table(train, train_file , col.names = FALSE, row.names = FALSE, sep = ",")
+  write.table(xval, xval_file, col.names = FALSE, row.names = FALSE, sep = ",")
+  write.table(pred1, pred1_file, col.names = FALSE, row.names = FALSE, sep = ",")
+  write.table(pred2, pred2_file, col.names = FALSE, row.names = FALSE, sep = ",")
+  write_to_log_file("######################## PREPARATION ENDS #######################")
+  
 }
