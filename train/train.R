@@ -36,6 +36,7 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
   # these two are the only interesting 
   # params that end up improving the model so far
   num_runs <- 3
+  d <- MODEL_PARAM_START$dropouts
   h_start <- MODEL_PARAM_START$hidden
   e_start <- MODEL_PARAM_START$epochs
   h_end <- MODEL_PARAM_END$hidden
@@ -51,7 +52,7 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
       h <- h_start + h_inc*(i-1)
       e <- e_start + e_inc*(i-1)
       print(paste("Hidden layers: ", h, ", epochs: ", e, sep = ""))
-      nn <- train(h,e)
+      nn <- train(d,h,e)
       r2 <- h2o.r2(nn, valid = TRUE)
       if (r2 > best_r2) {
         best_r2 <- r2(nn)
@@ -61,6 +62,11 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
       # log this run
       print(paste("R2: ", r2, ", mse: ", mse, sep = ","))
       write_to_log_file(summary(nn))
+      # log_info contains run name and feature selection
+      hyperparam_d <- paste(d, collapse = ",")
+      hyperparam_h <- paste(h, collapse = ",")
+      hyperparam_e <- e
+      write_to_master_log(log_info[1], paste(log_info[2], collapse = ","), hyperparam_d, hyperparam_h, hyperparam_e, h2o.r2(nn, train = TRUE), h2o.mse(nn, train = TRUE), h2o.r2(nn, valid = TRUE), h2o.mse(nn, valid = TRUE))      
       
       if (write_to_db) {
         # connect to db 
@@ -70,7 +76,6 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
         # close connection
         dbDisconnect(con)
       }
-      write_to_master_log(id, train_r2, xval_r2)      
     }
   }
 
@@ -78,4 +83,27 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
   save(best_nn, file = output_file)
   write_to_log_file("######################## TRAINING ENDS ##########################")
 
+}
+
+train <- function(d, h, e) {
+  nn <- h2o.deeplearning(x = 2: ncol(dataH2o),
+                              y = 1,
+                              training_frame = dataTrainH2o,
+                              validation_frame = dataXValH2o,
+                              activation = "RectifierWithDropout",
+                              input_dropout_ratio = 0.2,
+                              hidden_dropout_ratios = c(d),
+                              # adaptive_rate = TRUE,
+                            # not as good
+                              # adaptive_rate = FALSE,
+                              # momentum_start = 0.5,
+                              # momentum_stable = 0.99,
+                              # rate = 0.01,
+                            # no good
+                              # stopping_rounds = 6,
+                              # stopping_metric = "AUTO",
+                              # distribution = "gaussian",
+                              hidden = c(h), 
+                              epochs = e)
+  return(nn)
 }
