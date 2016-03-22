@@ -25,7 +25,7 @@ predict_run <- function(model, prediction_path) {
   synergies <- as.numeric(unlist(as.data.frame(predictions)))
   results <- cbind(synergies, as.data.frame(prediction_set))
   # saving results and logging
-  output_file <- paste("./predict/predictions/", RUN_NAME, "-predictions.RData", sep = )
+  output_file <- paste("./predict/predictions/", RUN_NAME, "-predictions.RData", sep = "" )
   save(results, file = output_file)
   write_to_log_file(paste("Output file: ", output_file))
   write_to_log_file("######################## PREDICTION ENDS ########################")

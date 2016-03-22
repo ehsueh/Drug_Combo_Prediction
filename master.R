@@ -17,14 +17,14 @@ MASTERDIR <- "/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Pred
 # MASTERDIR <- "/home/zack/Drug_Combo_Prediction/"
 setwd(MASTERDIR)
 
-RUN_NAME <- "test_withFJD"
+RUN_NAME <- "low_epoch"
 LOG_PATH <- paste("./log/logs/", RUN_NAME, ".txt", sep = "")
 
 TRAIN2XVAL_RATIO <- 0.75
 # proportion of the training set used for cross validation
 # range: 0 to 1
 
-TOTAL_FEATURES <- c("monotherapy_normalized_avg_imputed", "drug_pchem", "string_gex_fjd")
+TOTAL_FEATURES <- c("monotherapy_normalized_avg_imputed", "drug_pchem", "string_gex")
 
 PCA_FEATURES <- c("monotherapy_normalized_avg_imputed")
 # vector of features used to train model and predict result which require PCA
@@ -32,13 +32,13 @@ PCA_FEATURES <- c("monotherapy_normalized_avg_imputed")
 
 SWAP_FEATURES <- c("monotherapy_normalized_avg_imputed", "drug_pchem")
 
-MODEL_PARAM_START <- list(dropout=c(0.3,0.3,0.3), hidden=c(300, 300, 300), epoch=1000)
+MODEL_PARAM_START <- list(dropout=c(0.3,0.3,0.3), hidden=c(300, 300, 300), epoch=5)
 # list of model parameters that map to their corresponding value or range
 # the pipeline will find the optimal value for all parameter to train the model
 # range: 
 # Example: list(h=c(300,300,300), e=1000)
 
-MODEL_PARAM_END <- list(dropout=c(0.3,0.3,0.3), hidden=c(300, 300, 300), epoch=1000)
+MODEL_PARAM_END <- list(dropout=c(0.3,0.3,0.3), hidden=c(300, 300, 300), epoch=5)
 # list of model parameters that map to their corresponding value or range
 # the pipeline will find the optimal value for all parameter to train the model
 # range: 
@@ -119,7 +119,7 @@ master_log_entry_head <- c(LOG_PATH, list(run_name=RUN_NAME,
 #   col - depends like the feature group
 
 
-t_xval_ch1_ch2_feature_set <- prep_run(TOTAL_FEATURES, PCA_FEATURES, SWAP_FEATURES, TRAIN2XVAL_RATIO, use_pred_for_pca = TRUE, base_name = RUN_NAME)
+# t_xval_ch1_ch2_feature_set <- prep_run(TOTAL_FEATURES, PCA_FEATURES, SWAP_FEATURES, TRAIN2XVAL_RATIO, use_pred_for_pca = TRUE, base_name = RUN_NAME)
 # input 
 #   TOTAL_FEATURES:   vector containing all the features for training
 #   PCA_FEATURES:     vector containing features to pca
@@ -172,8 +172,8 @@ if(COMPLETION_STAGE!=T){
 # FORMAT
 # ========================================
 
-ch1_formatted_prediction_score <- format_ch1(ch1_prediction_score, final = TRUE)
-ch2_formatted_prediction_score <- format_ch2(ch2_prediction_score, final = TRUE)
+ch1_formatted_prediction_path <- format_ch1(ch1_prediction_score, final = TRUE)
+ch2_formatted_prediction_path <- format_ch2(ch2_prediction_score, final = TRUE)
 # format_x convert the data into proper format and store it in .csv file
 # format_x return the path to the csv file
 # x determines the format: either challlenge 1 or challenge 2 format (ch1 or ch2)
@@ -185,8 +185,8 @@ ch2_formatted_prediction_score <- format_ch2(ch2_prediction_score, final = TRUE)
 # ========================================
 
 if(COMPLETION_STAGE=='A'){
-  archive_run(ch1_confidence_path, ch1_formatted_prediction_path, 1)
-  archive_run(ch2_confidence_path, ch2_formatted_prediction_path, 2)
+  archive_run("./confidence/combination_priority.csv", ch1_formatted_prediction_path, 1)
+  archive_run("./confidence/synergy_matrix.csv", ch2_formatted_prediction_path, 2)
 }
 # input
 #   ch1_confidence_path:            path to the confidence score .csv file

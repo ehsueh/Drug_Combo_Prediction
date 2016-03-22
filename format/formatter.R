@@ -40,13 +40,3 @@ format_ch2 <- function(predictions, final = FALSE) {
   write_to_log_file("######################## FORMATTING ENDS ########################")
   return(output_file)
 }
-
-# write output to file
-# write.csv(formatRound1(rfPredictions), file = paste(OUTPUT_DIR, "rfPredictionOutput.csv", sep = "/"), row.names = FALSE, col.names = FALSE, append = FALSE)
-# write.table(formatRound1(nnPredictions), file = paste(OUTPUT_DIR, "nnPredictionOutput-final-ch1-nn3.csv", sep = "/"), row.names = FALSE, col.names = FALSE, append = FALSE, sep = ",")
-# write.csv(formatRound1(avPredictions), file = paste(OUTPUT_DIR, "avPredictionOutput.csv", sep = "/"), row.names = FALSE, col.names = FALSE, append = FALSE)
-# write.csv(formatRound2(nnPredictions), file = paste(OUTPUT_DIR, "nnPredictionOutput-ch2-score-r3.2.csv", sep = "/"), row.names = FALSE, col.names = FALSE, append = FALSE)
-# write.table(formatRound2(nnPredictions), file = paste(OUTPUT_DIR, "nnPredictionOutput-ch2-binary20-r4.4.csv", sep = "/"), row.names = FALSE, col.names = FALSE, append = FALSE, sep = ",")
-# 
-# write.table(formatRound1(nnPredictions), file = paste(OUTPUT_DIR, "nnPredictionOutput-final-ch1-nn_pca80.csv", sep = "/"), row.names = FALSE, col.names = TRUE, append = FALSE, sep = ",")
-# write.table(formatRound2(nnPredictions2), file = paste(OUTPUT_DIR, "nnPredictionOutput-final-ch2-nn_pca80.csv", sep = "/"), row.names = FALSE, col.names = FALSE, append = FALSE, sep = ",")
