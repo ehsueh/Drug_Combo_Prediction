@@ -21,12 +21,12 @@ library(stringr)
 # MODEL_PARAM<-list(hidden:c(300,300,300), epochs:1000)
 train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END, log_info, write_to_db = TRUE) {
   write_to_log_file("######################## TRAINING STARTS ########################")
-  output_file <- paste("./predict/predictions/", RUN_NAME, "-model.RData")
+  output_file <- paste(MASTERDIR, "./train/model/", RUN_NAME, "-model.RData", sep = "")
   write_to_log_file(paste("Output file: ", output_file))
 # TO-DO: Not yet implemetned DB logging
 #   if (write_to_db) {
 #    source("./feature_bank/dbUtils.R")
-   # setwd(MASTERDIR)
+#     setwd(MASTERDIR)
 #   }
   
   # set up a local cluster with 1GB RAM
@@ -38,11 +38,11 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
   # these two are the only interesting 
   # params that end up improving the model so far
   num_runs <- 3
-  d <- MODEL_PARAM_START$dropouts
+  d <- MODEL_PARAM_START$dropout
   h_start <- MODEL_PARAM_START$hidden
-  e_start <- MODEL_PARAM_START$epochs
+  e_start <- MODEL_PARAM_START$epoch
   h_end <- MODEL_PARAM_END$hidden
-  e_end <- MODEL_PARAM_END$epochs
+  e_end <- MODEL_PARAM_END$epoch
   h_inc <- round((h_end - h_start)/num_runs)
   e_inc <- round((e_end - e_start)/num_runs)
   
@@ -71,8 +71,8 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
       }
       
       # log this run
-      print(paste("R2: ", r2, ", mse: ", mse, sep = ","))
-      write_to_log_file(summary(nn))
+      print(paste("XVal R2: ", r2, sep = ""))
+      write_to_log_file(capture.output(summary(nn)))
       # log_info contains run name and feature selection
       hyperparam_d <- paste(d, collapse = ",")
       hyperparam_h <- paste(h, collapse = ",")
@@ -94,27 +94,4 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
   save(best_nn, file = output_file)
   write_to_log_file("######################## TRAINING ENDS ##########################")
 
-}
-
-train <- function(d, h, e) {
-  nn <- h2o.deeplearning(x = 2: ncol(dataH2o),
-                              y = 1,
-                              training_frame = dataTrainH2o,
-                              validation_frame = dataXValH2o,
-                              activation = "RectifierWithDropout",
-                              input_dropout_ratio = 0.2,
-                              hidden_dropout_ratios = c(d),
-                              # adaptive_rate = TRUE,
-                            # not as good
-                              # adaptive_rate = FALSE,
-                              # momentum_start = 0.5,
-                              # momentum_stable = 0.99,
-                              # rate = 0.01,
-                            # no good
-                              # stopping_rounds = 6,
-                              # stopping_metric = "AUTO",
-                              # distribution = "gaussian",
-                              hidden = c(h), 
-                              epochs = e)
-  return(nn)
 }
