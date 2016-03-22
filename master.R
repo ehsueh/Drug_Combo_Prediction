@@ -17,7 +17,7 @@
 MASTERDIR <- "/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction/"
 setwd(MASTERDIR)
 
-RUN_NAME <- "apple"
+RUN_NAME <- "test"
 LOG_PATH <- paste("./log/logs/", RUN_NAME, ".txt", sep = "")
 
 TRAIN2XVAL_RATIO <- 0.75
@@ -78,21 +78,36 @@ source("./archive/zipper.R")
 source("./log/logger.R")
 
 # ========================================
-# GLOBAL VARIABLE
-# ========================================
-
-log_count <- length(list.files("./log/logs/"))
-
-
-# ========================================
-# CREATE LOG FILE
+# INITIALIZE LOG FILE & MASTER LOG ENGRY
 # ========================================
 # require to have master_log.csv and logs/ in Drug_Combo_Prediction/log/ before running this section
 
-log_count <- log_count + 1
-log_file_path <- paste("log/logs/log", log_count, ".txt", sep = "")
-file.create(log_file_path)
-write(paste("log ID:\tlog", log_count, sep = ""), log_file_path, append = TRUE)
+dir.create("./log/logs/")
+write_to_log_file("Run Name")
+write_to_log_file(paste("\t", RUN_NAME,sep = ""))
+write_to_log_file("Cross Validation to Training Ratio")
+write_to_log_file(paste("\t", XVAL2TRAIN_RATIO,sep = ""))
+write_to_log_file("Total Features")
+write_to_log_file(paste("\t", TOTAL_FEATURES,sep = ""))
+write_to_log_file("PCA Features")
+write_to_log_file(paste("\t", PCA_FEATURES,sep = ""))
+write_to_log_file("Swap Features")
+write_to_log_file(paste("\t", SWAP_FEATURES,sep = ""))
+write_to_log_file("Model Parameter Start")
+write_to_log_file(paste("\t", MODEL_PARAM_START,sep = ""))
+write_to_log_file("Model Parameter End")
+write_to_log_file(paste("\t", MODEL_PARAM_END,sep = ""))
+write_to_log_file("Completion Stage")
+write_to_log_file(paste("\t", COMPLETION_STAGE,sep = ""))
+
+master_log_entry_head <- c(LOG_PATH, list(run_name=RUN_NAME, 
+                                          xval2train_ratio=XVAL2TRAIN_RATIO, 
+                                          total_features=TOTAL_FEATURES,
+                                          pca_features=PCA_FEATURES,
+                                          swap_features=SWAP_FEATURES,
+                                          model_param_start=MODEL_PARAM_START,
+                                          model_param_end=MODEL_PARAM_END,
+                                          completion_stage=COMPLETION_STAGE))
 
 
 # ========================================
@@ -123,7 +138,7 @@ t_xval_ch1_ch2_feature_set <- prep_run(TOTAL_FEATURES, PCA_FEATURES, SWAP_FEATUR
 # NEURAL NETWORK TRAINING
 # ========================================
 
-best_model <- train_run(t_xval_ch1_ch2_feature_set[1], t_xval_ch1_ch2_feature_set[2], MODEL_PARAM_START, MODEL_PARAM_END, log_file_path, SWAP_FEATURES, TRUE)
+best_model <- train_run(t_xval_ch1_ch2_feature_set[1], t_xval_ch1_ch2_feature_set[2], MODEL_PARAM_START, MODEL_PARAM_END, log_file_path, SWAP_FEATURES, master_log_entry_head, TRUE)
 # input
 #   t_xval_ch1_ch2_feature_set[1]:  feature set for training models
 #   t_xval_ch1_ch2_feature_set[2]:  feature set for cross validating the trained model

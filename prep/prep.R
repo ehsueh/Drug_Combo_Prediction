@@ -75,15 +75,14 @@ prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_
     
     # if set needs pca 
     if (path%in%pca_list) {
-      data_for_pca <- train
+      data_for_pca <- train # pca with train data and prediction data (no xval data)
       if (use_pred_for_pca) {
         data_for_pca <- rbind(data_for_pca, pred1, pred2)
       } 
-      # pca with train data and prediction data (no xval data)
+      pca <- prcomp(formula = ~., data = data_for_pca)
       # keeping enough principle components to cover 80% proportion of variance
       # 80% was experimentally found to yield the best result during the manual runs
       num_cols <- which(cumsum(pca$sdev^2 / sum(pca$sdev^2)) > 0.80) [1]
-      pca <- prcomp(formula = ~., data = data_for_pca)
       train <- predict(pca, train)[,1:num_cols]
       xval <- predict(pca, xval)[,1:num_cols]
       pred1 <-predict(pca, pred1)[,1:num_cols]
