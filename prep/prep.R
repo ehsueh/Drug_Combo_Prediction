@@ -32,7 +32,7 @@ prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_
   OUT_DIR <- paste(MASTERDIR, "./prep/h2o_feature/", sep = "")
   
   # load relevant triplets (training, ch1 and ch2 for final round)
-  load(paste(FEATURE_DIR, "triplets.RData", sep = "/"))
+  load(paste(FEATURE_DIR, "triplets.RData", sep = ""))
   # number of samples for the different sets
   NUM_UNIQ_TRAIN <- dim(training_triplets_and_syn_scores)[1] # unique training set
   NUM_PRED_CH1 <- dim(ch1_triplets)[1] # challenge 1 prediction set
@@ -95,7 +95,7 @@ prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_
     }
     
     train_all <- cbind(train_all, train)
-    xval_all <- cbind(xvall_all, xval)
+    xval_all <- cbind(xval_all, xval)
     pred1_all <- cbind(pred1_all, pred1)
     pred2_all <- cbind(pred2_all, pred2)
     
