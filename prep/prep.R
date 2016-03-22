@@ -68,7 +68,7 @@ prep_run <- function(union_set, pca_list, swap_list, train2xval_ratio, use_pred_
 #       set <- as.data.frame(apply(set, 2, replace_non_num))
 #     }
     
-    temp <- set[1:NUM_UNIQ_TRAIN,]tx
+    temp <- set[1:NUM_UNIQ_TRAIN,]
     train <- temp[train_idx,]
     xval <- temp[-train_idx,]
     pred1 <- set[(NUM_UNIQ_TRAIN+1):(NUM_UNIQ_TRAIN + NUM_PRED_CH1),]

@@ -17,14 +17,14 @@ MASTERDIR <- "/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Pred
 # MASTERDIR <- "/home/zack/Drug_Combo_Prediction/"
 setwd(MASTERDIR)
 
-RUN_NAME <- "test"
+RUN_NAME <- "test_withFJD"
 LOG_PATH <- paste("./log/logs/", RUN_NAME, ".txt", sep = "")
 
 TRAIN2XVAL_RATIO <- 0.75
 # proportion of the training set used for cross validation
 # range: 0 to 1
 
-TOTAL_FEATURES <- c("monotherapy_normalized_avg_imputed", "drug_pchem", "string_gex")
+TOTAL_FEATURES <- c("monotherapy_normalized_avg_imputed", "drug_pchem", "string_gex_fjd")
 
 PCA_FEATURES <- c("monotherapy_normalized_avg_imputed")
 # vector of features used to train model and predict result which require PCA
@@ -194,3 +194,5 @@ if(COMPLETION_STAGE=='A'){
 #   1:                              integer value of either 1 or 2 indicating the challenge index for naming purposes
 # side effect
 #   1. save the zip file ready for submission in archive folder
+
+

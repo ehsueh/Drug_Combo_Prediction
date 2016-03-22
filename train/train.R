@@ -46,8 +46,11 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
   h_inc <- round((h_end - h_start)/num_runs)
   e_inc <- round((e_end - e_start)/num_runs)
   
+  if (h_start == h_end && e_start == e_end) {
+    num_runs <- 1
+  }
   best_nn <- NULL # best neural net by validation R2
-  best_r2 <- NULL # R2 of the best neural net
+  best_r2 <- 0 # R2 of the best neural net
   
   for (i in 1:num_runs) {
     for (j in 1:num_runs) {
@@ -66,7 +69,7 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
       
       r2 <- h2o.r2(nn, valid = TRUE)
       if (r2 > best_r2) {
-        best_r2 <- r2(nn)
+        best_r2 <- r2
         best_nn <- nn
       }
       
@@ -79,14 +82,14 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
       hyperparam_e <- e
       write_to_master_log(log_info[1], paste(log_info[2], collapse = ","), hyperparam_d, hyperparam_h, hyperparam_e, h2o.r2(nn, train = TRUE), h2o.mse(nn, train = TRUE), h2o.r2(nn, valid = TRUE), h2o.mse(nn, valid = TRUE))      
       
-      if (write_to_db) {
-        # connect to db 
-        con <- connectDreamDB()
-        # write params and results to database
-        # To-Do: finish stuff here
-        # close connection
-        dbDisconnect(con)
-      }
+#       if (write_to_db) {
+#         # connect to db 
+#         con <- connectDreamDB()
+#         # write params and results to database
+#         # To-Do: finish stuff here
+#         # close connection
+#         dbDisconnect(con)
+#       }
     }
   }
 
