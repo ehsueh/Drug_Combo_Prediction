@@ -12,9 +12,9 @@
 # ========================================
 # set parameters for the pipeline
 
-# setwd("/home/zack/Drug_Combo_Prediction")
 # set working directory to location of Drug_Combo_Prediction folder
-MASTERDIR <- "/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction/"
+# MASTERDIR <- "/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction/"
+MASTERDIR <- "/home/zack/Drug_Combo_Prediction/"
 setwd(MASTERDIR)
 
 RUN_NAME <- "test"
