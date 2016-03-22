@@ -16,7 +16,7 @@ setwd("/home/zack/Drug_Combo_Prediction")
 # setwd("/media/ehsueh/Data/projects/dream/refactored-codes/Drug_Combo_Prediction")
 # set working directory to location of Drug_Combo_Prediction folder
 
-RUN_NAME <- "apple"
+RUN_NAME <- "test"
 LOG_PATH <- paste("./log/logs/", RUN_NAME, ".txt", sep = "")
 
 XVAL2TRAIN_RATIO <- 0.3
@@ -82,6 +82,7 @@ source("./log/logger.R")
 # ========================================
 # require to have master_log.csv and logs/ in Drug_Combo_Prediction/log/ before running this section
 
+dir.create("./log/logs/")
 write_to_log_file("Run Name")
 write_to_log_file(paste("\t", RUN_NAME,sep = ""))
 write_to_log_file("Cross Validation to Training Ratio")
@@ -113,7 +114,7 @@ master_log_entry_head <- c(LOG_PATH, list(run_name=RUN_NAME,
 # FEATURE PREPARATION
 # ========================================
 
-load("/feature_bank/monotherapy_normalized_avg_imputed.RData")
+load("./feature_bank/monotherapy_normalized_avg_imputed.RData")
 # from feature_bank folder loads multiple feature matrices that are separated by functionality
 # dimension:
 #   row - 1794 + 1089 + 31535 (training feature set + ch 1a feature set + ch 2 feature set without duplication)
