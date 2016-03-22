@@ -97,4 +97,7 @@ train_run <- function(train_path, xval_path, MODEL_PARAM_START, MODEL_PARAM_END,
   save(best_nn, file = output_file)
   write_to_log_file("######################## TRAINING ENDS ##########################")
 
+  # return the best neural net model
+  return(best_nn)
+  
 }
